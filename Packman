@@ -8,12 +8,12 @@ writer = Turtle(visible=False)
 aim = vector(5, 0)
 pacman = vector(-40, -80)
 ghosts = [
-    [vector(-180, 160), vector(8, 0)],    # Velocidad aumentada de 5 a 8
-    [vector(-180, -160), vector(0, 8)],   # Velocidad aumentada de 5 a 8
-    [vector(100, 160), vector(0, -8)],    # Velocidad aumentada de 5 a 8
-    [vector(100, -160), vector(-8, 0)],   # Velocidad aumentada de 5 a 8
+    [vector(-180, 160), vector(8, 0), "red"],    
+    [vector(-180, -160), vector(0, 8),"cyan"],   
+    [vector(100, 160), vector(0, -8),"orange"],    
+    [vector(100, -160), vector(-8, 0),"pink"],   
 ]
-# Tablero modificado
+
 tiles = [
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0,
@@ -112,15 +112,15 @@ def move():
     goto(pacman.x + 10, pacman.y + 10)
     dot(20, 'yellow')
 
-    for point, course in ghosts:
+    for point, course, color in ghosts:
         if valid(point + course):
             point.move(course)
         else:
             options = [
-                vector(8, 0),      # Velocidad aumentada de 5 a 8
-                vector(-8, 0),     # Velocidad aumentada de 5 a 8
-                vector(0, 8),      # Velocidad aumentada de 5 a 8
-                vector(0, -8),     # Velocidad aumentada de 5 a 8
+                vector(8, 0),      
+                vector(-8, 0),     
+                vector(0, 8),      
+                vector(0, -8),     
             ]
             plan = choice(options)
             course.x = plan.x
@@ -128,11 +128,11 @@ def move():
 
         up()
         goto(point.x + 10, point.y + 10)
-        dot(20, 'red')
+        dot(20, color)
 
     update()
 
-    for point, course in ghosts:
+    for point, course, color in ghosts:
         if abs(pacman - point) < 20:
             return
 
