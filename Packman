@@ -17,7 +17,6 @@ ball = vector(-200, -200)
 speed = vector(0, 0)
 targets = []
 
-
 def tap(x, y):
     """Respond to screen tap."""
     if not inside(ball):
@@ -26,11 +25,9 @@ def tap(x, y):
         speed.x = (x + 200) / 25
         speed.y = (y + 200) / 25
 
-
 def inside(xy):
     """Return True if xy within screen."""
     return -200 < xy.x < 200 and -200 < xy.y < 200
-
 
 def draw():
     """Draw ball and targets."""
@@ -46,21 +43,31 @@ def draw():
 
     update()
 
-
 def move():
     """Move ball and targets."""
+    # Generar nuevos objetivos aleatoriamente
     if randrange(40) == 0:
         y = randrange(-150, 150)
         target = vector(200, y)
         targets.append(target)
 
+    # Mover los objetivos de manera más inteligente
     for target in targets:
-        target.x -= 0.5
+        # Si la bola está cerca, moverse hacia arriba o hacia abajo para evitar ser golpeado
+        if abs(target.x - ball.x) < 50 and abs(target.y - ball.y) < 50:
+            if target.y < ball.y:
+                target.y -= 0.5  # Moverse hacia abajo
+            else:
+                target.y += 0.5  # Moverse hacia arriba
+        else:
+            target.x -= 0.5  # Movimiento normal hacia la izquierda
 
+    # Mover la bola con gravedad
     if inside(ball):
         speed.y -= 0.35
         ball.move(speed)
 
+    # Eliminar objetivos golpeados
     dupe = targets.copy()
     targets.clear()
 
@@ -70,12 +77,12 @@ def move():
 
     draw()
 
+    # Verificar si algún objetivo ha salido de la pantalla
     for target in targets:
         if not inside(target):
             return
 
     ontimer(move, 50)
-
 
 setup(420, 420, 370, 0)
 hideturtle()
